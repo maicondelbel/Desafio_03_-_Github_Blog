@@ -9,7 +9,7 @@ import { ApiContext } from '../../contexts/ApiContext'
 import { HomeContainer, PostsListsContainer } from './styles'
 
 export function Home() {
-  const { posts, fetchPosts, fetchProfile } = useContext(ApiContext)
+  const { posts, fetchPosts, isLoading, fetchProfile } = useContext(ApiContext)
 
   useEffect(() => {
     fetchProfile()
@@ -21,8 +21,8 @@ export function Home() {
       <Profile />
       <FindPostsForm />
       <PostsListsContainer>
-        {posts?.items.length === 0 && <Loader />}
-        {posts?.items &&
+        {isLoading && <Loader />}
+        {!isLoading &&
           posts?.items.map((post, index) => {
             return (
               <NavLink key={index} to={`/post/${post.number}`}>
@@ -34,6 +34,7 @@ export function Home() {
               </NavLink>
             )
           })}
+        {posts?.items.length === 0 && <p>Nada para mostrar!</p>}
       </PostsListsContainer>
     </HomeContainer>
   )
